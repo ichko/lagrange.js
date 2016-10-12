@@ -28,20 +28,12 @@ class Lagrange {
     }
 
     buildPolynomial() {
-        let divisor = this.px.map((x, i) => this.splitPolynomial(i)(x), this);
-        let dividentPolynomial = this.fullPolynomial(this.px);
-        
-        this.polynomial = (x) => {
-            let sum = 0;
-            let divident = dividentPolynomial(x);
+        let divisor = this.px.map((x, i) =>
+            this.splitPolynomial(i)(x), this);
 
-            return this.py.reduce((sum, y, i) => {
-                let value = y * divident / (x - this.px[i]) * divisor[i];
-                return sum + value;
-            });
-        };
-
-        return this;
+        return this.polynomial = (x) => 
+            this.py.reduce((sum, y, i) =>
+                sum + y * this.splitPolynomial(i)(x) / divisor[i]);
     }
 
 }
