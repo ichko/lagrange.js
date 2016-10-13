@@ -2,18 +2,32 @@
     <head>
         <meta charset="utf-8">
         <title>Example</title>
+
+        <style>*{padding: 0;margin: 0}</style>
     </head>
     <body>
+        <canvas id="canvas"></canvas>
+
         <script src="lagrange.js"></script>
         <script src="plotter.js"></script>
         <script>
+            let canvas = document.getElementById('canvas');
+            let [ width, height ] = [ canvas.width, canvas.height ] = [ innerWidth, innerHeight ];
+
+            let ctx = canvas.getContext('2d');
+            ctx.translate(width / 2, height / 2);
+                
             let points = [
-                new Point(),
-                new Point(),
-                new Point(),
-            ];
-            let polynomial = new lagrange(points).polynomial;
-            
+                    {x: 0, y: 1},
+                    {x: 1, y: 2},
+                    {x: 2, y: 3}
+                ],
+                polynomial = new Lagrange(points).polynomial,
+                plotter = new Plotter(ctx);
+
+                plotter
+                    .addFunction(Math.sin)
+                    .show();
         </script>
     </body>
 </html>
