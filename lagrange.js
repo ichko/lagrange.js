@@ -14,7 +14,7 @@ class Lagrange {
     }
 
     splitPolynomial(i) {
-        let left = this.fullPolynomial(this.px.slice(0, i))
+        let left = this.fullPolynomial(this.px.slice(0, i)),
             right = this.fullPolynomial(this.px.slice(i + 1, this.px.length));
         return (x) => left(x) * right(x);
     }
