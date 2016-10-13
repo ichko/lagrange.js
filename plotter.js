@@ -13,13 +13,12 @@ class Plotter {
         this.functions = [];
     }
 
-    addFunctions(func) {
-        this.functions.concat(func);
+    addFunctions(functions) {
+        this.functions = this.functions.concat(functions);
         return this;
     }
 
     addPoints(func) {
-        this.functions.push(func);
         return this;
     }
 

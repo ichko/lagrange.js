@@ -23,7 +23,8 @@
             let points = [
                     {x: 0, y: 1},
                     {x: 1, y: 2},
-                    {x: 2, y: 3}
+                    {x: -10, y: -30},
+                    {x: 10, y: -30},
                 ],
                 polynomial = new Lagrange(points).polynomial,
                 plotter = new Plotter(ctx);
@@ -37,7 +38,7 @@
                 function draw() {
                     plotter
                         .clear(width, height)
-                        .addFunctions([polynomial])
+                        .addFunctions([polynomial, Math.sin])
                         .show();
                 }
                 draw();
