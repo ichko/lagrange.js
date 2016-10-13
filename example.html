@@ -10,12 +10,15 @@
 
         <script src="lagrange.js"></script>
         <script src="plotter.js"></script>
+        <script src="io.js"></script>
         <script>
             let canvas = document.getElementById('canvas');
             let [ width, height ] = [ canvas.width, canvas.height ] = [ innerWidth, innerHeight ];
 
             let ctx = canvas.getContext('2d');
             ctx.translate(width / 2, height / 2);
+
+            handler = new IO();
                 
             let points = [
                     {x: 0, y: 1},

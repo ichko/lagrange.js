@@ -4,8 +4,8 @@ class Plotter {
         from: -800, to: 800,
         color: 'blue',
         lineSize: 2,
-        stepSize: 10,
-        scale: 10,
+        stepSize: 5,
+        scale: 20,
         origin: { x: 0, y: 0 }
     }) {
         this.ctx = ctx;
