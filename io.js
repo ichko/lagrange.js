@@ -13,7 +13,7 @@ class IO {
     registerBindings() {
         let me = this
         window.addEventListener('mousewheel', (event) => {
-            me.mouse.scroll(event.wheelDelta);
+            me.mouse.scroll(Math.sign(event.wheelDelta));
         }, this);
     }
 

@@ -13,7 +13,12 @@ class Plotter {
         this.functions = [];
     }
 
-    addFunction(func) {
+    addFunctions(func) {
+        this.functions.concat(func);
+        return this;
+    }
+
+    addPoints(func) {
         this.functions.push(func);
         return this;
     }
@@ -22,6 +27,8 @@ class Plotter {
         this.functions.forEach((func) => {
             this.plotFunction(func);
         }, this);
+        
+        return this;
     }
 
     plotFunction(func) {
@@ -45,6 +52,16 @@ class Plotter {
         this.ctx.lineTo(toX, -toY);
         this.ctx.stroke();
         this.ctx.closePath();
+
+        return this;
+    }
+
+    
+                
+    clear(width, height) {
+        this.ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        this.ctx.fillRect(-width / 2, -height / 2, width, height);
+        return this;
     }
 
 }

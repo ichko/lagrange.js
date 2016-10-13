@@ -28,9 +28,20 @@
                 polynomial = new Lagrange(points).polynomial,
                 plotter = new Plotter(ctx);
 
-                plotter
-                    .addFunction(Math.sin)
-                    .show();
+                    
+                handler.mouse.scroll = (direction) => {
+                    plotter.config.scale *= 1.2 ** direction;
+                    draw();
+                };
+
+                function draw() {
+                    plotter
+                        .clear(width, height)
+                        .addFunctions([polynomial])
+                        .show();
+                }
+                draw();
+
         </script>
     </body>
 </html>
