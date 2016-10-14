@@ -25,33 +25,35 @@
             })('canvas');
 
                 
-            let points = [
-                    {x: 0, y: 1},
-                    {x: 1, y: 2},
-                    {x: -10, y: -30},
-                    {x: 10, y: -30},
-                ],
-                polynomial = new Lagrange(points).polynomial,
-                plotter = new Plotter(ctx),
-                handler = new IO();
+            let plotter = new Plotter(ctx),
+                io = new IO(),
+                lagrange = new Lagrange();
 
-            handler.mouse.scroll = (direction) => {
-                plotter.config.scale *= 1.2 ** direction;
-                draw();
-            };
+            io
+                .onKey('+', () => plotter.config.scale *= 1.1)
+                .onKey('-', () => plotter.config.scale /= 1.1)
+                .onMouse('scroll', (direction) => plotter.config.scale *= 1.2 ** direction)
+                .onMouse('click', (point) => {
+                    let p = {
+                        x: point.x - width / 2,
+                        y: -point.y + height / 2
+                    };
+                    lagrange.addPoints([p]);
+                    plotter.addPoints([p]);
+                });
+                
+            
+            plotter
+                .addFunctions([lagrange.polynomial, Math.sin]);
 
-            handler.mouse.click = (point) => {
-                points.push(point);
-                polynomial = new Lagrange(points).polynomial;
-            };
-
-            function draw() {
+            (function draw() {
                 plotter
                     .clear(width, height)
-                    .addFunctions([polynomial, Math.sin])
                     .show();
-            }
-            draw();
+                io.invokeHandlers();
+
+                requestAnimationFrame(draw);
+            })();
 
         </script>
     </body>

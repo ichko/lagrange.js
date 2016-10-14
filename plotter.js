@@ -1,7 +1,7 @@
 class Plotter {
 
     constructor(ctx, config = {
-        from: -800, to: 800,
+        from: -500, to: 500,
         color: 'blue',
         lineSize: 2,
         stepSize: 5,
@@ -11,6 +11,7 @@ class Plotter {
         this.ctx = ctx;
         this.config = config;
         this.functions = [];
+        this.points = [];
     }
 
     addFunctions(functions) {
@@ -18,13 +19,18 @@ class Plotter {
         return this;
     }
 
-    addPoints(func) {
+    addPoints(points) {
+        this.points = this.points.concat(points);
         return this;
     }
 
     show() {
         this.functions.forEach((func) => {
             this.plotFunction(func);
+        }, this);
+
+        this.points.forEach((point) => {
+            this.drawPoint(point.x, point.y);
         }, this);
         
         return this;
@@ -51,6 +57,18 @@ class Plotter {
         this.ctx.lineTo(toX, -toY);
         this.ctx.stroke();
         this.ctx.closePath();
+
+        return this;
+    }
+
+    drawPoint(x, y) {
+        this.ctx.fillStyle = this.config.color;
+        this.ctx.lineWidth = this.config.lineSize;
+
+        this.ctx.beginPath();
+        this.ctx.arc(x, -y, 10, 0, Math.PI * 2);
+        this.ctx.closePath();
+        this.ctx.stroke();
 
         return this;
     }
