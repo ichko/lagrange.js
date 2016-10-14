@@ -11,7 +11,9 @@
         <script src="lagrange.js"></script>
         <script src="plotter.js"></script>
         <script src="io.js"></script>
+        
         <script>
+
             let canvas = document.getElementById('canvas');
             let [ width, height ] = [ canvas.width, canvas.height ] = [ innerWidth, innerHeight ];
 
@@ -29,19 +31,18 @@
                 polynomial = new Lagrange(points).polynomial,
                 plotter = new Plotter(ctx);
 
-                    
-                handler.mouse.scroll = (direction) => {
-                    plotter.config.scale *= 1.2 ** direction;
-                    draw();
-                };
-
-                function draw() {
-                    plotter
-                        .clear(width, height)
-                        .addFunctions([polynomial, Math.sin])
-                        .show();
-                }
+            handler.mouse.scroll = (direction) => {
+                plotter.config.scale *= 1.2 ** direction;
                 draw();
+            };
+
+            function draw() {
+                plotter
+                    .clear(width, height)
+                    .addFunctions([polynomial, Math.sin])
+                    .show();
+            }
+            draw();
 
         </script>
     </body>
