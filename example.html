@@ -14,13 +14,16 @@
         
         <script>
 
-            let canvas = document.getElementById('canvas');
-            let [ width, height ] = [ canvas.width, canvas.height ] = [ innerWidth, innerHeight ];
+            let [ canvas, ctx, width, height ] = ((canvasId) => {
+                let canvas = document.getElementById(canvasId);
+                [ canvas.width, canvas.height ] = [ innerWidth, innerHeight ];
 
-            let ctx = canvas.getContext('2d');
-            ctx.translate(width / 2, height / 2);
+                let ctx = canvas.getContext('2d');
+                ctx.translate(canvas.width / 2, canvas.height / 2);
 
-            handler = new IO();
+                return [ canvas, ctx, canvas.width, canvas.height ];
+            })('canvas');
+
                 
             let points = [
                     {x: 0, y: 1},
@@ -29,11 +32,17 @@
                     {x: 10, y: -30},
                 ],
                 polynomial = new Lagrange(points).polynomial,
-                plotter = new Plotter(ctx);
+                plotter = new Plotter(ctx),
+                handler = new IO();
 
             handler.mouse.scroll = (direction) => {
                 plotter.config.scale *= 1.2 ** direction;
                 draw();
+            };
+
+            handler.mouse.click = (point) => {
+                points.push(point);
+                polynomial = new Lagrange(points).polynomial;
             };
 
             function draw() {

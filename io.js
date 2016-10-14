@@ -4,7 +4,8 @@ class IO {
         this.mouse = {
             x: 0,
             y: 0,
-            scroll: () => {}
+            scroll: () => {},
+            click: () => {}
         };
 
         this.registerBindings();
@@ -14,7 +15,11 @@ class IO {
         let me = this
         window.addEventListener('mousewheel', (event) => {
             me.mouse.scroll(Math.sign(event.wheelDelta));
-        }, this);
+        });
+
+        window.addEventListener('click', (event) => {
+            me.mouse.click({ x: event.x, y: event.y });
+        });
     }
 
 
