@@ -2,12 +2,11 @@ class Lagrange {
 
     constructor(points = []) {
         this.polynomial = (x) => 1;
-        this.addPoints(points);
+        this.setPoints(points);
     }
 
-    addPoints(points) {
-        this.px = points.map((p) => p.x);
-        this.py = points.map((p) => p.y);
+    setPoints(points) {
+        this.points = points;
         this.build();
 
         return this;
@@ -18,21 +17,22 @@ class Lagrange {
             product * (x - xi), 1);
     }
 
-    splitPolynomial(i) {
-        let left = this.fullPolynomial(this.px.slice(0, i)),
-            right = this.fullPolynomial(this.px.slice(i + 1, this.px.length));
+    splitPolynomial(i, px) {
+        let left = this.fullPolynomial(px.slice(0, i)),
+            right = this.fullPolynomial(px.slice(i + 1, px.length));
 
         return (x) => left(x) * right(x);
     }
 
     build() {
-        let divisor = this.px.map((x, i) =>
-            this.splitPolynomial(i)(x), this),
+        let px = this.points.map((p) => p.x),
+            divisor = px.map((x, i) =>
+                this.splitPolynomial(i, px)(x), this),
             me = this;
 
         return this.polynomial = (x) => 
-            this.py.reduce((sum, y, i) =>
-                sum + y * me.splitPolynomial(i)(x) / divisor[i], 0);
+            this.points.map((p) => p.y).reduce((sum, y, i) =>
+                sum + y * me.splitPolynomial(i, px)(x) / divisor[i], 0);
     }
 
 }

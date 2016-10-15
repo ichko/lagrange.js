@@ -27,19 +27,20 @@
                 
             let plotter = new Plotter(ctx),
                 io = new IO(),
-                lagrange = new Lagrange();
+                lagrange = new Lagrange(plotter.points);
 
             io
                 .onKey('+', () => plotter.config.scale *= 1.1)
                 .onKey('-', () => plotter.config.scale /= 1.1)
                 .onMouse('scroll', (direction) => plotter.config.scale *= 1.2 ** direction)
                 .onMouse('click', (point) => {
-                    let p = {
+                    point = {
                         x: point.x - width / 2,
                         y: -point.y + height / 2
                     };
-                    lagrange.addPoints([p]);
-                    plotter.addPoints([p]);
+                    plotter.addPoint(point);
+                    lagrange.build();
+                    plotter.functions[0] = lagrange.polynomial;
                 });
                 
             

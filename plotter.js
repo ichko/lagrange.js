@@ -19,8 +19,12 @@ class Plotter {
         return this;
     }
 
-    addPoints(points) {
-        this.points = this.points.concat(points);
+    addPoint(point) {
+        this.points.push({
+            x: point.x / this.config.scale,
+            y: point.y / this.config.scale
+        });
+
         return this;
     }
 
@@ -66,7 +70,7 @@ class Plotter {
         this.ctx.lineWidth = this.config.lineSize;
 
         this.ctx.beginPath();
-        this.ctx.arc(x, -y, 10, 0, Math.PI * 2);
+        this.ctx.arc(x * this.config.scale, -y * this.config.scale, 10, 0, Math.PI * 2);
         this.ctx.closePath();
         this.ctx.stroke();
 
