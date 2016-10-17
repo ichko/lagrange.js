@@ -12,6 +12,10 @@ class Lagrange {
         return this;
     }
 
+    get() {
+        return this.polynomial;
+    }
+
     fullPolynomial(roots) {
         return (x) => roots.reduce((product, xi) =>
             product * (x - xi), 1);

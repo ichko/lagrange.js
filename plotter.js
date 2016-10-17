@@ -10,12 +10,12 @@ class Plotter {
     }) {
         this.ctx = ctx;
         this.config = config;
-        this.functions = [];
+        this.functionBuilders = [];
         this.points = [];
     }
 
-    addFunctions(functions) {
-        this.functions = this.functions.concat(functions);
+    addFunctionBuilders(functions) {
+        this.functionBuilders = this.functionBuilders.concat(functions);
         return this;
     }
 
@@ -29,8 +29,8 @@ class Plotter {
     }
 
     show() {
-        this.functions.forEach((func) => {
-            this.plotFunction(func);
+        this.functionBuilders.forEach((builder) => {
+            this.plotFunction(builder());
         }, this);
 
         this.points.forEach((point) => {
@@ -54,7 +54,7 @@ class Plotter {
 
     drawLine(fromX, fromY, toX, toY, style) {
         this.ctx.strokeStyle = style.color || this.config.color;
-        this.ctx.lineWidth = style.color.size || this.config.size;
+        this.ctx.lineWidth = style.size || this.config.size;
 
         this.ctx.beginPath();
         this.ctx.moveTo(fromX, -fromY);
