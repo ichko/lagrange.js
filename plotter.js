@@ -3,7 +3,7 @@ class Plotter {
     constructor(ctx, config = {
         from: -500, to: 500,
         color: 'blue',
-        lineSize: 2,
+        size: 2,
         stepSize: 5,
         scale: 20,
         origin: { x: 0, y: 0 }
@@ -34,7 +34,7 @@ class Plotter {
         }, this);
 
         this.points.forEach((point) => {
-            this.drawPoint(point.x, point.y);
+            this.drawPoint(point.x, point.y, point.style || {});
         }, this);
         
         return this;
@@ -47,14 +47,14 @@ class Plotter {
             let fromX = toX - this.config.stepSize;
             let toY = func(x / this.config.scale + this.config.origin.x) * this.config.scale  + this.config.origin.y;
 
-            this.drawLine(fromX, fromY, toX, toY);
+            this.drawLine(fromX, fromY, toX, toY, func.style || {});
             fromY = toY;
         }
     }
 
-    drawLine(fromX, fromY, toX, toY) {
-        this.ctx.strokeStyle = this.config.color;
-        this.ctx.lineWidth = this.config.lineSize;
+    drawLine(fromX, fromY, toX, toY, style) {
+        this.ctx.strokeStyle = style.color || this.config.color;
+        this.ctx.lineWidth = style.color.size || this.config.size;
 
         this.ctx.beginPath();
         this.ctx.moveTo(fromX, -fromY);
@@ -65,9 +65,9 @@ class Plotter {
         return this;
     }
 
-    drawPoint(x, y) {
-        this.ctx.fillStyle = this.config.color;
-        this.ctx.lineWidth = this.config.lineSize;
+    drawPoint(x, y, style) {
+        this.ctx.fillStyle = style.color || this.config.color;
+        this.ctx.lineWidth = style.size || this.config.size;
 
         this.ctx.beginPath();
         this.ctx.arc(x * this.config.scale, -y * this.config.scale, 10, 0, Math.PI * 2);
