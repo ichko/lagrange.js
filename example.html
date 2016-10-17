@@ -40,18 +40,16 @@
                     };
                     plotter.addPoint(point);
                     lagrange.build();
-                    plotter.functions[0] = lagrange.polynomial;
                 });
                 
             
-            plotter
-                .addFunctions([lagrange.polynomial, Math.sin]);
+            plotter.addFunctionBuilders([lagrange.get.bind(lagrange), () => Math.sin]);
 
             (function draw() {
+                io.invokeHandlers();
                 plotter
                     .clear(width, height)
                     .show();
-                io.invokeHandlers();
 
                 requestAnimationFrame(draw);
             })();
