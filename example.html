@@ -38,12 +38,12 @@
                         x: point.x - width / 2,
                         y: -point.y + height / 2
                     };
-                    plotter.addPoint(point);
+                    plotter.addScaledPoint(point);
                     lagrange.build();
                 });
                 
             
-            plotter.addFunctionBuilders([lagrange.get.bind(lagrange), () => Math.sin]);
+            plotter.addFunctionBuilders([lagrange.getBuilder(), () => Math.sin]);
 
             (function draw() {
                 io.invokeHandlers();

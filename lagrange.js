@@ -12,8 +12,8 @@ class Lagrange {
         return this;
     }
 
-    get() {
-        return this.polynomial;
+    getBuilder() {
+        return () => this.polynomial;
     }
 
     fullPolynomial(roots) {
