@@ -29,9 +29,11 @@
             let plotter = new Plotter(ctx),
                 io = new IO(),
                 lagrange = new Lagrange(plotter.points),
-                interactive = new Interactive();
+                interactive = new Interactive(),
+                translate = ({ x, y }) => ({ x: x - width / 2, y: -y + height / 2 });
 
             interactive.event.create('hover', ({ x, y }, mouse) => {
+                mouse = translate(mouse);
                 let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
                 return Math.sqrt(dx * dx + dy.dy) < 10; 
             }, () => io.mouse);
@@ -45,11 +47,7 @@
                 .onKey('-', () => plotter.config.scale /= 1.1)
                 .onMouse('scroll', (direction) => plotter.config.scale *= 1.2 ** direction)
                 .onMouse('click', (point) => {
-                    plotter.addScaledPoint({
-                        x: point.x - width / 2,
-                        y: -point.y + height / 2
-                    });
-
+                    plotter.addScaledPoint(translate(point));
                     lagrange.build();
                 });
                 
