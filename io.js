@@ -58,6 +58,11 @@ class IO {
             }
         });
 
+        window.addEventListener('mousemove', (event) => {
+            me.mouse.x = event.x;
+            me.mouse.y = event.y;
+        });
+
         window.addEventListener('keyup', (event) => {
             if(me.keyBindings[event.key]) {
                 me.keyBindings[event.key].isDown = false;

@@ -8,9 +8,10 @@
     <body>
         <canvas id="canvas"></canvas>
 
-        <script src="lagrange.js"></script>
+        <script src="interactive.js"></script>
         <script src="plotter.js"></script>
         <script src="io.js"></script>
+        <script src="lagrange.js"></script>
         
         <script>
 
@@ -27,18 +28,28 @@
                 
             let plotter = new Plotter(ctx),
                 io = new IO(),
-                lagrange = new Lagrange(plotter.points);
+                lagrange = new Lagrange(plotter.points),
+                interactive = new Interactive();
+
+            interactive.event.create('hover', ({ x, y }, mouse) => {
+                let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
+                return Math.sqrt(dx * dx + dy.dy) < 10; 
+            }, () => io.mouse);
+
+            interactive.event.attach.hover.to(plotter.points, (point) => {
+                console.log(point);
+            });
 
             io
                 .onKey('+', () => plotter.config.scale *= 1.1)
                 .onKey('-', () => plotter.config.scale /= 1.1)
                 .onMouse('scroll', (direction) => plotter.config.scale *= 1.2 ** direction)
                 .onMouse('click', (point) => {
-                    point = {
+                    plotter.addScaledPoint({
                         x: point.x - width / 2,
                         y: -point.y + height / 2
-                    };
-                    plotter.addScaledPoint(point);
+                    });
+
                     lagrange.build();
                 });
                 
@@ -46,6 +57,7 @@
             plotter.addFunctionBuilders([lagrange.getBuilder(), () => Math.sin]);
 
             (function draw() {
+                interactive.invokeHandlers();
                 io.invokeHandlers();
                 plotter
                     .clear(width, height)

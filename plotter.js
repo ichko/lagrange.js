@@ -70,12 +70,12 @@ class Plotter {
 
     drawPoint(x, y, style) {
         this.ctx.fillStyle = style.color || this.config.color;
-        this.ctx.lineWidth = style.size || this.config.size;
 
         this.ctx.beginPath();
-        this.ctx.arc(x * this.config.scale, -y * this.config.scale, 10, 0, Math.PI * 2);
+        this.ctx.arc(x * this.config.scale, -y * this.config.scale,
+                     style.size || this.config.size * 4, 0, Math.PI * 2);
         this.ctx.closePath();
-        this.ctx.stroke();
+        this.ctx.fill();
 
         return this;
     }
