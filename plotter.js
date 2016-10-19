@@ -19,12 +19,15 @@ class Plotter {
         return this;
     }
 
-    addPoint(point) {
-        this.points.push({
+    addScaledPoint(point) {
+        return this.addPoint({
             x: point.x / this.config.scale,
             y: point.y / this.config.scale
         });
+    }
 
+    addPoint(point) {
+        this.points.push(point);
         return this;
     }
 
