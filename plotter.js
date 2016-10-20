@@ -80,8 +80,7 @@ class Plotter {
         return this;
     }
 
-    
-                
+
     clear(width, height) {
         this.ctx.fillStyle = 'rgba(255, 255, 255, 1)';
         this.ctx.fillRect(-width / 2, -height / 2, width, height);
