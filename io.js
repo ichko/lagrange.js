@@ -36,8 +36,6 @@ class IO {
         for(let key in this.keyBindings){
             if(this.keyBindings[key].isDown){
                 this.keyBindings[key].handler();
-                this.mouse.dx = 0;
-                this.mouse.dy = 0;
             }
         }
 
@@ -67,8 +65,8 @@ class IO {
         });
 
         window.addEventListener('mousemove', (event) => {
-            me.mouse.dx = event.x - me.mouse.x;
-            me.mouse.dy = event.y - me.mouse.y;
+            me.mouse.dx = event.movementX;
+            me.mouse.dy = event.movementY;
             me.mouse.x = event.x;
             me.mouse.y = event.y;
         });
