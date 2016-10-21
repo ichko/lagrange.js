@@ -29,29 +29,33 @@
                 io = new IO(),
                 lagrange = new Lagrange(plotter.points),
                 event = new Event(),
+                
                 translate = ({ x, y, down }) => ({
                     x: (x - width / 2) / plotter.config.scale,
                     y: (-y + height / 2) / plotter.config.scale,
                     down: down
                 }),
+                distance = (point, { x, y }) => {
+                    let [ dx, dy ] = [ point.x - x, point.y - y ];
+                    return Math.sqrt(dx * dx + dy * dy);
+                },
                 draggedElement = undefined;
 
 
             event
-                .create('hover', ({ x, y }, mouse) => {
-                    let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
-                    return Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
-                }, () => translate(io.mouse))
+                .create('hover', (point, mouse) =>
+                    distance(point, mouse) < 1,
+                    () => translate(io.mouse))
 
                 .create('move', (point, mouse) => {
-                    let [ dx, dy ] = [ point.x - mouse.x, point.y - mouse.y ];
-                    if(mouse.down && Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale){
+                    let drag = mouse.down && distance(point, mouse) < 1;
+                    if(drag){
                         draggedElement = point;
                     } else if(!mouse.down) {
                         draggedElement = false;
                     }
 
-                    return draggedElement;
+                    return mouse.down;
                 }, () => translate(io.mouse));
 
 
@@ -61,8 +65,9 @@
                     (point) => point.style = { color: 'blue' }
                 )
                 .attach.move.to(plotter.points, (point, mouse) => {
-                    draggedElement.x = translate(io.mouse).x;
-                    draggedElement.y = translate(io.mouse).y;
+                    draggedElement.x = mouse.x;
+                    draggedElement.y = mouse.y;
+                    lagrange.build();
                 });
 
             io
