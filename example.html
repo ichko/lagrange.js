@@ -61,10 +61,11 @@
 
             event
                 .attach.hover.to(plotter.points,
-                    (point) => point.style = { color: 'red' },
-                    (point) => point.style = { color: 'blue' }
+                    (point) => point.style = { color: '#ffd6d6' },
+                    (point) => point.style = { color: '#ffffdd' }
                 )
                 .attach.move.to(plotter.points, (point, mouse) => {
+                    draggedElement.style = { color: '#ffa5a5' };
                     draggedElement.x = mouse.x;
                     draggedElement.y = mouse.y;
                     lagrange.build();
@@ -79,7 +80,7 @@
                     lagrange.build();
                 });
 
-            plotter.addFunctionBuilders([lagrange.getBuilder(), () => Math.sin]);
+            plotter.addFunctionBuilders([lagrange.getBuilder()]);
 
 
             (function draw() {

@@ -2,9 +2,9 @@ class Plotter {
 
     constructor(ctx, config = {
         from: -500, to: 500,
-        color: 'blue',
-        size: 2,
-        stepSize: 5,
+        color: '#f70e75',
+        size: 10,
+        stepSize: 9,
         scale: 20,
         origin: { x: 0, y: 0 }
     }) {
@@ -37,7 +37,11 @@ class Plotter {
         }, this);
 
         this.points.forEach((point) => {
-            this.drawPoint(point.x, point.y, point.style || {});
+            this.drawPoint(
+                point.x * this.config.scale,
+                point.y * this.config.scale,
+                point.style || {}
+            );
         }, this);
         
         return this;
@@ -64,6 +68,7 @@ class Plotter {
         this.ctx.lineTo(toX, -toY);
         this.ctx.stroke();
         this.ctx.closePath();
+        this.drawPoint(fromX, fromY, { size: this.config.size / 2 });
 
         return this;
     }
@@ -72,8 +77,7 @@ class Plotter {
         this.ctx.fillStyle = style.color || this.config.color;
 
         this.ctx.beginPath();
-        this.ctx.arc(x * this.config.scale, -y * this.config.scale,
-                     style.size || this.config.size * 4, 0, Math.PI * 2);
+        this.ctx.arc(x, -y, style.size || this.config.size, 0, Math.PI * 2);
         this.ctx.closePath();
         this.ctx.fill();
 
@@ -82,7 +86,7 @@ class Plotter {
 
 
     clear(width, height) {
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        this.ctx.fillStyle = '#1D1E45';
         this.ctx.fillRect(-width / 2, -height / 2, width, height);
         return this;
     }
