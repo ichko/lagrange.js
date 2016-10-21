@@ -5,7 +5,7 @@ class Event {
         this.create = (name, condition, contextProvider) => {
             let binds = [];
             this.eventInstances.push({ binds, condition, contextProvider, name });
-            this.event.attach[name] = {
+            this.attach[name] = {
                 to: (elements, handler, antiHandler) => binds.push({ elements, handler, antiHandler })
             };
             

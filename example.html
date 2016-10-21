@@ -8,10 +8,10 @@
     <body>
         <canvas id="canvas"></canvas>
 
-        <script src="interactive.js"></script>
+        <script src="event.js"></script>
         <script src="plotter.js"></script>
         <script src="io.js"></script>
-        <script src="event.js"></script>
+        <script src="lagrange.js"></script>
         
         <script>
 
@@ -57,7 +57,7 @@
             plotter.addFunctionBuilders([lagrange.getBuilder(), () => Math.sin]);
 
             (function draw() {
-                interactive.invokeHandlers();
+                event.invokeHandlers();
                 io.invokeHandlers();
                 plotter
                     .clear(width, height)
