@@ -1,19 +1,18 @@
-class Interactive {
+class Event {
 
     constructor() {
         this.eventInstances = [];
-        this.event = {
-            create: (name, condition, contextProvider) => {
-                let binds = [];
-                this.eventInstances.push({ binds, condition, contextProvider, name });
-                this.event.attach[name] = {
-                    to: (elements, handler, antiHandler) => binds.push({ elements, handler, antiHandler })
-                };
-                
-                return this;
-            },
-            attach: {}
-        };
+        this.create = (name, condition, contextProvider) => {
+            let binds = [];
+            this.eventInstances.push({ binds, condition, contextProvider, name });
+            this.event.attach[name] = {
+                to: (elements, handler, antiHandler) => binds.push({ elements, handler, antiHandler })
+            };
+            
+            return this;
+        }
+        
+        this.attach = {}
     }
 
     invokeHandlers() {
