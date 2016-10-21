@@ -4,21 +4,24 @@ class IO {
         this.mouse = {
             x: 0,
             y: 0,
-            scroll: () => {},
-            click: () => {}
+            dx: 0,
+            dy: 0,
+            down: false
         };
         this.mouseBindings = {
+            scroll: [],
             click: [],
-            scroll: []
+            dblclick: []
         };
         this.keyBindings = {};
         this.registerBindings();
     }
 
     onMouse(event, handler) {
-        if(this.mouseBindings[event]) {
-            this.mouseBindings[event].push(handler);
+        if(!this.mouseBindings[event]) {
+            this.mouseBindings[event] = [];
         }
+        this.mouseBindings[event].push(handler);
 
         return this;
     }
@@ -29,10 +32,12 @@ class IO {
         return this;
     }
 
-    invokeHandlers() {
+    trigger() {
         for(let key in this.keyBindings){
             if(this.keyBindings[key].isDown){
                 this.keyBindings[key].handler();
+                this.mouse.dx = 0;
+                this.mouse.dy = 0;
             }
         }
 
@@ -41,16 +46,19 @@ class IO {
 
     registerBindings() {
         let me = this
+        let clickHandler = (handler, event) => handler({ x: event.x, y: event.y });
 
         window.addEventListener('mousewheel', (event) => {
             me.mouseBindings.scroll.forEach((handler =>
                 handler(Math.sign(event.wheelDelta))));
         });
 
-        window.addEventListener('click', (event) => {
-            me.mouseBindings.click.forEach((handler) =>
-                handler({ x: event.x, y: event.y }));
-        });
+        window.addEventListener('click', (event) =>
+            me.mouseBindings.click.forEach((handler) => clickHandler(handler, event)));
+
+        window.addEventListener('dblclick', (event) =>
+            me.mouseBindings.dblclick.forEach((handler) => clickHandler(handler, event)));
+
 
         window.addEventListener('keydown', (event) => {
             if(me.keyBindings[event.key]) {
@@ -59,9 +67,14 @@ class IO {
         });
 
         window.addEventListener('mousemove', (event) => {
+            me.mouse.dx = event.x - me.mouse.x;
+            me.mouse.dy = event.y - me.mouse.y;
             me.mouse.x = event.x;
             me.mouse.y = event.y;
         });
+
+        window.addEventListener('mousedown', () => me.mouse.down = true);
+        window.addEventListener('mouseup', () => me.mouse.down = false);
 
         window.addEventListener('keyup', (event) => {
             if(me.keyBindings[event.key]) {

@@ -29,36 +29,47 @@
                 io = new IO(),
                 lagrange = new Lagrange(plotter.points),
                 event = new Event(),
-                translate = ({ x, y }) => ({
+                translate = ({ x, y, down }) => ({
                     x: (x - width / 2) / plotter.config.scale,
-                    y: (-y + height / 2) / plotter.config.scale
+                    y: (-y + height / 2) / plotter.config.scale,
+                    down: down
                 });
 
-            event.create('hover', ({ x, y }, mouse) => {
-                let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
-                return Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
-            }, () => translate(io.mouse));
+            event
+                .create('hover', ({ x, y }, mouse) => {
+                    let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
+                    return Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
+                }, () => translate(io.mouse))
 
-            event.attach.hover.to(plotter.points,
-                (point) => point.style = { color: 'red' },
-                (point) => point.style = { color: 'blue' }
-            );
+                .create('drag', ({ x, y }, mouse) => {
+                    let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
+                    return mouse.down && Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
+                }, () => translate(io.mouse));
+
+            event
+                .attach.hover.to(plotter.points,
+                    (point) => point.style = { color: 'red' },
+                    (point) => point.style = { color: 'blue' }
+                )
+                .attach.drag.to(plotter.points, (point, mouse) => {
+                    point = translate(mouse);
+                });
 
             io
                 .onKey('+', () => plotter.config.scale *= 1.1)
                 .onKey('-', () => plotter.config.scale /= 1.1)
                 .onMouse('scroll', (direction) => plotter.config.scale *= 1.2 ** direction)
-                .onMouse('click', (point) => {
+                .onMouse('dblclick', (point) => {
                     plotter.addPoint(translate(point));
                     lagrange.build();
                 });
-                
-            
+
             plotter.addFunctionBuilders([lagrange.getBuilder(), () => Math.sin]);
 
+
             (function draw() {
-                event.invokeHandlers();
-                io.invokeHandlers();
+                event.trigger();
+                io.trigger();
                 plotter
                     .clear(width, height)
                     .show();
