@@ -11,7 +11,7 @@
         <script src="interactive.js"></script>
         <script src="plotter.js"></script>
         <script src="io.js"></script>
-        <script src="lagrange.js"></script>
+        <script src="event.js"></script>
         
         <script>
 
@@ -28,18 +28,18 @@
             let plotter = new Plotter(ctx),
                 io = new IO(),
                 lagrange = new Lagrange(plotter.points),
-                interactive = new Interactive(),
+                event = new Event(),
                 translate = ({ x, y }) => ({
                     x: (x - width / 2) / plotter.config.scale,
                     y: (-y + height / 2) / plotter.config.scale
                 });
 
-            interactive.event.create('hover', ({ x, y }, mouse) => {
+            event.create('hover', ({ x, y }, mouse) => {
                 let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
                 return Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
             }, () => translate(io.mouse));
 
-            interactive.event.attach.hover.to(plotter.points,
+            event.attach.hover.to(plotter.points,
                 (point) => point.style = { color: 'red' },
                 (point) => point.style = { color: 'blue' }
             );
