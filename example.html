@@ -33,7 +33,9 @@
                     x: (x - width / 2) / plotter.config.scale,
                     y: (-y + height / 2) / plotter.config.scale,
                     down: down
-                });
+                }),
+                draggedElement = undefined;
+
 
             event
                 .create('hover', ({ x, y }, mouse) => {
@@ -41,18 +43,26 @@
                     return Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
                 }, () => translate(io.mouse))
 
-                .create('drag', ({ x, y }, mouse) => {
-                    let [ dx, dy ] = [ x - mouse.x, y - mouse.y ];
-                    return mouse.down && Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale;
+                .create('move', (point, mouse) => {
+                    let [ dx, dy ] = [ point.x - mouse.x, point.y - mouse.y ];
+                    if(mouse.down && Math.sqrt(dx * dx + dy * dy) < 10 / plotter.config.scale){
+                        draggedElement = point;
+                    } else if(!mouse.down) {
+                        draggedElement = false;
+                    }
+
+                    return draggedElement;
                 }, () => translate(io.mouse));
+
 
             event
                 .attach.hover.to(plotter.points,
                     (point) => point.style = { color: 'red' },
                     (point) => point.style = { color: 'blue' }
                 )
-                .attach.drag.to(plotter.points, (point, mouse) => {
-                    point = translate(mouse);
+                .attach.move.to(plotter.points, (point, mouse) => {
+                    draggedElement.x = translate(io.mouse).x;
+                    draggedElement.y = translate(io.mouse).y;
                 });
 
             io
