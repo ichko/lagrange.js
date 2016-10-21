@@ -39,7 +39,8 @@
                     let [ dx, dy ] = [ point.x - x, point.y - y ];
                     return Math.sqrt(dx * dx + dy * dy);
                 },
-                draggedElement = undefined;
+                draggedElement = undefined,
+                frame = 0;
 
 
             event
@@ -82,6 +83,17 @@
 
             plotter.addFunctionBuilders([lagrange.getBuilder()]);
 
+            plotter.points.push(
+                { x: -20, y: 10 },
+                { x: -10, y: -10 },
+                { x: -0, y: 5 },
+                { x: 10, y: 10 },
+                { x: 20, y: 0 }
+            );
+            plotter.points.forEach((point) => {
+                point.y = Math.random() * 15 - 7.5;
+            });
+            lagrange.build();
 
             (function draw() {
                 event.trigger();
@@ -90,6 +102,14 @@
                     .clear(width, height)
                     .show();
 
+                if(io.mouse.out) {
+                    plotter.points.forEach((point) => {
+                        point.y += Math.sin(point.x + frame / 50) / 10;
+                        lagrange.build();
+                    });
+                }
+
+                frame++;
                 requestAnimationFrame(draw);
             })();
 

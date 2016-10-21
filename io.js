@@ -6,7 +6,8 @@ class IO {
             y: 0,
             dx: 0,
             dy: 0,
-            down: false
+            down: false,
+            out: true
         };
         this.mouseBindings = {
             scroll: [],
@@ -73,6 +74,9 @@ class IO {
 
         window.addEventListener('mousedown', () => me.mouse.down = true);
         window.addEventListener('mouseup', () => me.mouse.down = false);
+        
+        window.document.addEventListener('mouseover', () => me.mouse.out = false);
+        window.document.addEventListener('mouseout', () => me.mouse.out = true);
 
         window.addEventListener('keyup', (event) => {
             if(me.keyBindings[event.key]) {
